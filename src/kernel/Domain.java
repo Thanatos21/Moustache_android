@@ -70,11 +70,11 @@ public class Domain {
 	 * @param t The Task you want to add
 	 */
 	public void addTask(Task t) {
-		if ( !this.tasks.contains(t) ) {
-			this.tasks.add(t);
+		if ( this.tasks.contains(t) ) {
+			System.err.println("This task is already present in this domain's Task list");
 		}
 		else {
-			System.err.println("This task is already present in this domain's Task list");
+			this.tasks.add(t);
 		}
 	}
 	
