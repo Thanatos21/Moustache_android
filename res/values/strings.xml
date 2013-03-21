@@ -5,7 +5,14 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     
+    <!-- Ok, Cancel, ... buttons -->
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+    
+    <!-- Warning messages -->
+    <string name="warningSizeTitle">The title cannot be empty</string>
+    
     <!-- Main split action bar (for the Domain activity) -->
     <string name="menu_addDomain">New Domain</string>
-
+    <string name="create_dialog_titleValue_hint">Enter the title</string>
 </resources>
