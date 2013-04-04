@@ -1,24 +1,53 @@
-package com.univ_nantes.moustache;
+package com.univ_nantes.moustache.activity;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import kernel.Domain;
+import kernel.Task;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ExpandableListView;
 
-import com.univ_nantes.moustache.dialogs.DomainDialogFragment;
-import com.univ_nantes.moustache.dialogs.DomainDialogFragment.DomainDialogListener;
+import com.univ_nantes.moustache.R;
+import com.univ_nantes.moustache.adapter.DomainAdapter;
+import com.univ_nantes.moustache.dialog.DomainDialogFragment;
+import com.univ_nantes.moustache.dialog.DomainDialogFragment.DomainDialogListener;
 
 public class MainActivity extends Activity implements DomainDialogListener {
-
+	private static final String SAVE_FILE_NAME = "moustache.save";
+	
+	private List<Domain> domainList;
+	private DomainAdapter adapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		loadSavedData();
+		
+		ExpandableListView exList = (ExpandableListView) findViewById(R.id.main_list);
+	    adapter = new DomainAdapter(domainList, this);
+	    adapter.registerDataSetObserver(new DataSetObserver() {
+	    	public void onChanged() {
+	    		saveData();
+	    	}
+		});
+	    exList.setIndicatorBounds(0, 20);
+	    exList.setAdapter(adapter);
 	}
 
 	@Override
@@ -51,10 +80,11 @@ public class MainActivity extends Activity implements DomainDialogListener {
 		EditText edit = (EditText)dialog.getDialog().findViewById(R.id.create_dialog_titleValue);
 		String domainTitle = edit.getText().toString();
 		
-		// Checking whether the user typed or not an entry
+		// Checking whether or not the user typed an entry
 		if ( domainTitle.length() > 0 ) {
-			TextView text = ((TextView) findViewById(R.id.hello));
-			text.setText(domainTitle);
+			Domain d = new Domain(domainTitle);
+			domainList.add(d);
+			adapter.notifyDataSetChanged();
 		}
 		else {
 			AlertDialog.Builder warningSize = new AlertDialog.Builder(this);
@@ -72,9 +102,39 @@ public class MainActivity extends Activity implements DomainDialogListener {
 
 	@Override
 	public void onDomainDialogNegativeClick(DialogFragment dialog) {
-		// TODO Auto-generated method stub
 		System.out.println("Cancelling the new domain creation");
 		dialog.dismiss();
+	}
+	
+	public void saveData() {
+		FileOutputStream fos;
+		ObjectOutputStream oos;
+		try {
+			fos = openFileOutput(SAVE_FILE_NAME, Context.MODE_PRIVATE);
+			oos = new ObjectOutputStream(fos);
+			oos.writeObject(domainList);
+			oos.flush();
+			oos.close();
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadSavedData() {
+		FileInputStream fis;
+		ObjectInputStream ois;
+		try
+		{
+			fis = openFileInput(SAVE_FILE_NAME);
+			ois = new ObjectInputStream(fis);
+			domainList = (ArrayList<Domain>) ois.readObject();
+		}
+		catch(Exception ex)
+		{
+			domainList = new ArrayList<Domain>();
+			ex.printStackTrace();
+		}
 	}
 
 }

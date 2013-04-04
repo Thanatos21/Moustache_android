@@ -6,11 +6,5 @@
         android:title="@string/menu_addDomain"
         android:icon="@drawable/ic_action_new_domain"
         android:showAsAction="ifRoom" />
-    
-    <item 
-        android:id="@+id/plop"
-        android:orderInCategory="100"
-        android:title="plop"
-        android:showAsAction="ifRoom"/>
 
 </menu>

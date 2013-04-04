@@ -1,10 +1,17 @@
 package kernel;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 /**
  * @author julien
  * This class represent a simple task with just a name and a boolean to know whether the task is done or not
  */
-public class Task {
+public class Task implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	protected String name;
 	protected boolean taskDone;
 	
@@ -17,6 +24,7 @@ public class Task {
 		this.name = name;
 		this.taskDone = false;
 	}
+
 
 	/**
 	 * Getter for the attribute name
@@ -49,7 +57,7 @@ public class Task {
 	public void setTaskDone(boolean taskDone) {
 		this.taskDone = taskDone;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
@@ -72,4 +80,17 @@ public class Task {
 		}
 	}
 	
+	private  void readObject(ObjectInputStream ois)
+			throws IOException, ClassNotFoundException {
+		this.name = ois.readUTF();
+		this.taskDone = ois.readBoolean();
+	}
+
+	// méthode writeObject, utilisée lors de la sérialization
+	private  void writeObject(ObjectOutputStream oos)
+			throws IOException {
+		oos.writeUTF(this.name);
+		oos.writeBoolean(this.taskDone);
+	}
+
 }

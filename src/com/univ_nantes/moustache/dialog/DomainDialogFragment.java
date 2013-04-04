@@ -1,4 +1,4 @@
-package com.univ_nantes.moustache.dialogs;
+package com.univ_nantes.moustache.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,7 +28,7 @@ public class DomainDialogFragment extends DialogFragment {
 	@Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder createDomainDialog = new AlertDialog.Builder(getActivity());
-		createDomainDialog.setTitle("New domain");
+		createDomainDialog.setTitle(R.string.domain_dialog_title);
 		
 		// Adding a validation button to the dialog window
 		createDomainDialog.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {

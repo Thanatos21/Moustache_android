@@ -1,5 +1,9 @@
 package kernel;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +12,9 @@ import java.util.List;
  * @author julien
  * This class represent a Domain, meaning a list of Task
  */
-public class Domain {
+public class Domain implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	protected String name;
 	protected List<Task> tasks;
 	
@@ -101,4 +107,18 @@ public class Domain {
 		
 		return s;
 	}
+
+	private  void readObject(ObjectInputStream ois)
+			throws IOException, ClassNotFoundException {
+		this.name = ois.readUTF();
+		this.tasks = (List<Task>) ois.readObject();
+	}
+
+	// méthode writeObject, utilisée lors de la sérialization
+	private  void writeObject(ObjectOutputStream oos)
+			throws IOException {
+		oos.writeUTF(this.name);
+		oos.writeObject(this.tasks);
+	}
+
 }
