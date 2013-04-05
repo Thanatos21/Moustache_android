@@ -14,7 +14,7 @@
     <string name="cancel_button">Cancel</string>
     
     <!-- Warning messages -->
-    <string name="warningSizeTitle">The title cannot be empty</string>
+    <string name="warningSizeTitle">The name cannot be empty</string>
     
     <!-- Main split action bar (for the Domain activity) -->
     <string name="menu_addDomain">New Domain</string>

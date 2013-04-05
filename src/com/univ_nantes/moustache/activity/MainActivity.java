@@ -8,18 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kernel.Domain;
-import kernel.Task;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.univ_nantes.moustache.R;
 import com.univ_nantes.moustache.adapter.DomainAdapter;
@@ -85,19 +83,21 @@ public class MainActivity extends Activity implements DomainDialogListener {
 			Domain d = new Domain(domainTitle);
 			domainList.add(d);
 			adapter.notifyDataSetChanged();
+			
+			System.out.println("Creating a new domain with the name : " + domainTitle);
 		}
 		else {
-			AlertDialog.Builder warningSize = new AlertDialog.Builder(this);
-			warningSize.setMessage(R.string.warningSizeTitle);
-			warningSize.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    // Do nothing. Have to check if the Listener is mandatory
-                }
-            });
-
-			warningSize.create().show();
+//			AlertDialog.Builder warningSize = new AlertDialog.Builder(this);
+//			warningSize.setMessage(R.string.warningSizeTitle);
+//			warningSize.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+//                public void onClick(DialogInterface dialog, int id) {
+//                    // Do nothing. Have to check if the Listener is mandatory
+//                }
+//            });
+//
+//			warningSize.create().show();
+			Toast.makeText(getApplicationContext(), R.string.warningSizeTitle, Toast.LENGTH_LONG).show();
 		}
-		System.out.println("Creating a new domain with the name : " + domainTitle);
 	}
 
 	@Override

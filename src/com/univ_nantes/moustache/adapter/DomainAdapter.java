@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.univ_nantes.moustache.R;
 
@@ -49,8 +50,15 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 			al.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					EditText taskName = (EditText) alView.findViewById(R.id.create_dialog_titleValue);
-					items.get(groupPosition).addTask(new Task(taskName.getText().toString()));
-					notifyDataSetChanged();
+					String sTaskName = taskName.getText().toString();
+					
+					if ( sTaskName.length() > 0 ) {
+						items.get(groupPosition).addTask(new Task(taskName.getText().toString()));
+						notifyDataSetChanged();
+					}
+					else {
+						Toast.makeText(mContext, R.string.warningSizeTitle, Toast.LENGTH_LONG).show();
+					}
 				}
 			});
 	 
