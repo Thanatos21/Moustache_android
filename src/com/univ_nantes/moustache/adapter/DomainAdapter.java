@@ -7,15 +7,19 @@ import java.util.List;
 
 import kernel.Domain;
 import kernel.Task;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +31,7 @@ import com.univ_nantes.moustache.R;
  * @author julien
  *
  */
+@SuppressLint("NewApi")
 public class DomainAdapter extends BaseExpandableListAdapter {
 	
 	/**
@@ -38,6 +43,7 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 		private int groupPosition;
 
 		public AddTaskListener(int groupPosition) {
+			super();
 			this.groupPosition = groupPosition;
 		}
 
@@ -77,6 +83,7 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 		private int childPosition;
 		
 		public TaskCheckedListener(int groupPosition, int childPosition) {
+			super();
 			this.groupPosition = groupPosition;
 			this.childPosition = childPosition;
 		}
@@ -89,12 +96,122 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 			notifyDataSetChanged();
 		}
 	}
+	
+	public class onDomainTouchListener implements OnTouchListener {
+		private int groupPosition;
+		float startPoint;
+		float previousPoint;
+		
+		public onDomainTouchListener(int groupPosition) {
+			super();
+			this.groupPosition = groupPosition;
+		}
+		
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			float deltaX;
+			ExpandableListView parent = (ExpandableListView) v.getParent();
+			
+			switch(v.getId()) {
+			case R.id.domain_list: // Give your R.id.sample ...
+				switch(event.getAction()) {
+				case MotionEvent.ACTION_DOWN :
+					startPoint=event.getRawX();
+					System.out.println(startPoint);
+					break;
+				case MotionEvent.ACTION_MOVE :
+					deltaX = startPoint  -event.getRawX();
+					//v.setTranslationX(deltaX);
+					v.offsetLeftAndRight(1);
+					break;
+				case MotionEvent.ACTION_UP :
+					// Retrieving the "release" point of the user
+					previousPoint = event.getRawX();
+					deltaX = startPoint - previousPoint;
+					System.out.println("previousPoint = " + previousPoint);
+					
+					// Handling a simple click : expand or collapse the group
+					if ( deltaX < 50 ) {
+						if ( parent.isGroupExpanded(groupPosition) ) {
+							parent.collapseGroup(groupPosition);
+						}
+						else {
+							parent.expandGroup(groupPosition, true);
+						}
+					}
+					else if ( deltaX > 50 ) {
+						System.out.println("Removing domain at position " + groupPosition);
+						items.remove(groupPosition);
+						notifyDataSetChanged();
+					}
+					else {
+						//v.setTranslationX(0);
+					}
+					break;
+				}
+				break;
+			}
+			return true;
+		}
+
+	}
+	
+	public class onTaskTouchListener implements OnTouchListener {
+		private int groupPosition;
+		private int childPosition;
+		float startPoint;
+		float previousPoint;
+		
+		public onTaskTouchListener(int groupPosition, int chilPosition) {
+			super();
+			this.groupPosition = groupPosition;
+			this.childPosition = chilPosition;
+		}
+		
+		@Override
+		public boolean onTouch(View v, MotionEvent event) { 
+			ExpandableListView parent = (ExpandableListView) v.getParent();
+			switch(v.getId()) {
+			case R.id.task_sublist: // Give your R.id.sample ...
+				switch(event.getAction()) {
+				case MotionEvent.ACTION_DOWN :
+					parent.setFocusableInTouchMode(true);
+					startPoint=event.getX();
+					break;
+				case MotionEvent.ACTION_MOVE:    
+					
+					break;
+				case MotionEvent.ACTION_CANCEL:
+					break;
+				case MotionEvent.ACTION_UP :
+					// Retrieving the "release" point of the user
+					previousPoint = event.getX();
+					System.out.println(startPoint + " to " + previousPoint);
+					
+					// Handling a simple click : expand or collapse the group
+					if ( Math.abs(startPoint-previousPoint) < 50 ) {
+						// TODO Check or uncheck the checkbox
+					}
+					else if ( (startPoint < previousPoint+50) ) {
+						System.out.println("Removing task at position " + groupPosition + " - " + childPosition);
+						items.get(groupPosition).getTasks().remove(childPosition);
+						notifyDataSetChanged();
+					}
+					break;
+				}
+				break;
+			}
+			return true;
+		}
+
+	}
 
 	
 	
 	private List<Domain> items;
 	private Context mContext;
-    private LayoutInflater mInflater;
+
+	private LayoutInflater mInflater;
 
     public DomainAdapter(List<Domain> items, Context mContext) {
 		super();
@@ -130,6 +247,9 @@ public class DomainAdapter extends BaseExpandableListAdapter {
         taskCheck.setChecked(items.get(groupPosition).getTasks().get(childPosition).isTaskDone());
         taskCheck.setOnClickListener(new TaskCheckedListener(groupPosition, childPosition));
         
+        RelativeLayout taskList = (RelativeLayout) convertView.findViewById(R.id.task_sublist);
+        taskList.setOnTouchListener(new onTaskTouchListener(groupPosition, childPosition));
+        
         return convertView;
 	}
 
@@ -161,11 +281,13 @@ public class DomainAdapter extends BaseExpandableListAdapter {
             convertView = (RelativeLayout)mInflater.inflate(R.layout.domain_list, parent, false);
         }
 		
-        TextView taskName = (TextView) convertView.findViewById(R.id.domain_name);
-        taskName.setText(items.get(groupPosition).getName());
+        TextView domainName = (TextView) convertView.findViewById(R.id.domain_name);
+        domainName.setText(items.get(groupPosition).getName());
         
         ImageView addTask = (ImageView) convertView.findViewById(R.id.add_task_button);
         addTask.setOnClickListener(new AddTaskListener(groupPosition));
+        
+        //RelativeLayout domainList = (RelativeLayout) convertView.findViewById(R.id.domain_list);
         
         return convertView;
 	}

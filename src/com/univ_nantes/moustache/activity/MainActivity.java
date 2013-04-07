@@ -17,10 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.univ_nantes.moustache.R;
 import com.univ_nantes.moustache.adapter.DomainAdapter;
+import com.univ_nantes.moustache.adapter.SwipeDismissGroupListViewTouchListener;
 import com.univ_nantes.moustache.dialog.DomainDialogFragment;
 import com.univ_nantes.moustache.dialog.DomainDialogFragment.DomainDialogListener;
 
@@ -46,6 +48,18 @@ public class MainActivity extends Activity implements DomainDialogListener {
 		});
 	    exList.setIndicatorBounds(0, 20);
 	    exList.setAdapter(adapter);
+	    SwipeDismissGroupListViewTouchListener touchListener =
+                new SwipeDismissGroupListViewTouchListener(exList, new SwipeDismissGroupListViewTouchListener.OnDismissCallback() {
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    domainList.remove(adapter.getGroup(position));
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+        exList.setOnTouchListener(touchListener);
+        exList.setOnScrollListener(touchListener.makeScrollListener());
 	}
 
 	@Override
