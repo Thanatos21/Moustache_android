@@ -2,15 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:id="@+id/domain_list" >
 
     <TextView
         android:id="@+id/domain_name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/done_tasks_indicator"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginLeft="@dimen/domain_list_horizontal_margin"
         android:layout_marginTop="@dimen/domain_list_vertical_margin"
@@ -22,6 +23,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/task_button_selector" />
+        android:src="@drawable/ic_action_add_task" />
+
+    <TextView
+        android:id="@+id/done_tasks_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/add_task_button"
+        android:layout_marginRight="@dimen/domain_list_horizontal_margin"
+        android:textColor="@android:color/darker_gray"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

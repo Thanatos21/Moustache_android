@@ -92,6 +92,21 @@ public class Domain implements Serializable {
 		this.tasks.remove(t);
 	}
 	
+	/**
+	 * This method allow you to know the number of tasks done in this group
+	 * @return 
+	 */
+	public int getNumberTaskDone() {
+		int count = 0;
+		for ( Task t : tasks ) {
+			if ( t.isTaskDone() ) {
+				count += 1;
+			}
+		}
+		
+		return count;
+	}
+	
 	@Override
 	public String toString() {
 		String s;

@@ -97,65 +97,6 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 		}
 	}
 	
-	public class onDomainTouchListener implements OnTouchListener {
-		private int groupPosition;
-		float startPoint;
-		float previousPoint;
-		
-		public onDomainTouchListener(int groupPosition) {
-			super();
-			this.groupPosition = groupPosition;
-		}
-		
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			float deltaX;
-			ExpandableListView parent = (ExpandableListView) v.getParent();
-			
-			switch(v.getId()) {
-			case R.id.domain_list: // Give your R.id.sample ...
-				switch(event.getAction()) {
-				case MotionEvent.ACTION_DOWN :
-					startPoint=event.getRawX();
-					System.out.println(startPoint);
-					break;
-				case MotionEvent.ACTION_MOVE :
-					deltaX = startPoint  -event.getRawX();
-					//v.setTranslationX(deltaX);
-					v.offsetLeftAndRight(1);
-					break;
-				case MotionEvent.ACTION_UP :
-					// Retrieving the "release" point of the user
-					previousPoint = event.getRawX();
-					deltaX = startPoint - previousPoint;
-					System.out.println("previousPoint = " + previousPoint);
-					
-					// Handling a simple click : expand or collapse the group
-					if ( deltaX < 50 ) {
-						if ( parent.isGroupExpanded(groupPosition) ) {
-							parent.collapseGroup(groupPosition);
-						}
-						else {
-							parent.expandGroup(groupPosition, true);
-						}
-					}
-					else if ( deltaX > 50 ) {
-						System.out.println("Removing domain at position " + groupPosition);
-						items.remove(groupPosition);
-						notifyDataSetChanged();
-					}
-					else {
-						//v.setTranslationX(0);
-					}
-					break;
-				}
-				break;
-			}
-			return true;
-		}
-
-	}
-	
 	public class onTaskTouchListener implements OnTouchListener {
 		private int groupPosition;
 		private int childPosition;
@@ -283,6 +224,9 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 		
         TextView domainName = (TextView) convertView.findViewById(R.id.domain_name);
         domainName.setText(items.get(groupPosition).getName());
+        
+        TextView doneTasksIndicator = (TextView) convertView.findViewById(R.id.done_tasks_indicator);
+        doneTasksIndicator.setText("[" + items.get(groupPosition).getNumberTaskDone() + "/" + items.get(groupPosition).getTasks().size() + "]");
         
         ImageView addTask = (ImageView) convertView.findViewById(R.id.add_task_button);
         addTask.setOnClickListener(new AddTaskListener(groupPosition));
