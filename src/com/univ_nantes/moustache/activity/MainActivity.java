@@ -15,9 +15,9 @@ import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.univ_nantes.moustache.R;
@@ -51,9 +51,11 @@ public class MainActivity extends Activity implements DomainDialogListener {
 	    SwipeDismissGroupListViewTouchListener touchListener =
                 new SwipeDismissGroupListViewTouchListener(exList, new SwipeDismissGroupListViewTouchListener.OnDismissCallback() {
                             @Override
-                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                            public void onDismiss(View listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
-                                    domainList.remove(adapter.getGroup(position));
+                                    //domainList.remove(adapter.getGroup(position));
+                                	int grpPosition = ExpandableListView.getPackedPositionGroup(position);
+                                	System.out.println(listView + " - "+ position + " - " + grpPosition);
                                 }
                                 adapter.notifyDataSetChanged();
                             }

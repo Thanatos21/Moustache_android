@@ -12,14 +12,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -96,56 +93,6 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 			notifyDataSetChanged();
 		}
 	}
-	
-	public class onTaskTouchListener implements OnTouchListener {
-		private int groupPosition;
-		private int childPosition;
-		float startPoint;
-		float previousPoint;
-		
-		public onTaskTouchListener(int groupPosition, int chilPosition) {
-			super();
-			this.groupPosition = groupPosition;
-			this.childPosition = chilPosition;
-		}
-		
-		@Override
-		public boolean onTouch(View v, MotionEvent event) { 
-			ExpandableListView parent = (ExpandableListView) v.getParent();
-			switch(v.getId()) {
-			case R.id.task_sublist: // Give your R.id.sample ...
-				switch(event.getAction()) {
-				case MotionEvent.ACTION_DOWN :
-					parent.setFocusableInTouchMode(true);
-					startPoint=event.getX();
-					break;
-				case MotionEvent.ACTION_MOVE:    
-					
-					break;
-				case MotionEvent.ACTION_CANCEL:
-					break;
-				case MotionEvent.ACTION_UP :
-					// Retrieving the "release" point of the user
-					previousPoint = event.getX();
-					System.out.println(startPoint + " to " + previousPoint);
-					
-					// Handling a simple click : expand or collapse the group
-					if ( Math.abs(startPoint-previousPoint) < 50 ) {
-						// TODO Check or uncheck the checkbox
-					}
-					else if ( (startPoint < previousPoint+50) ) {
-						System.out.println("Removing task at position " + groupPosition + " - " + childPosition);
-						items.get(groupPosition).getTasks().remove(childPosition);
-						notifyDataSetChanged();
-					}
-					break;
-				}
-				break;
-			}
-			return true;
-		}
-
-	}
 
 	
 	
@@ -188,8 +135,7 @@ public class DomainAdapter extends BaseExpandableListAdapter {
         taskCheck.setChecked(items.get(groupPosition).getTasks().get(childPosition).isTaskDone());
         taskCheck.setOnClickListener(new TaskCheckedListener(groupPosition, childPosition));
         
-        RelativeLayout taskList = (RelativeLayout) convertView.findViewById(R.id.task_sublist);
-        taskList.setOnTouchListener(new onTaskTouchListener(groupPosition, childPosition));
+        //RelativeLayout taskList = (RelativeLayout) convertView.findViewById(R.id.task_sublist);
         
         return convertView;
 	}

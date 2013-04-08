@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:layout_marginTop="@dimen/domain_list_vertical_margin"
+    android:layout_marginBottom="@dimen/domain_list_vertical_margin"
     android:id="@+id/domain_list" >
 
     <TextView
@@ -13,9 +15,7 @@
         android:layout_centerVertical="true"
         android:layout_toStartOf="@+id/done_tasks_indicator"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginLeft="@dimen/domain_list_horizontal_margin"
-        android:layout_marginTop="@dimen/domain_list_vertical_margin"
-        android:layout_marginBottom="@dimen/domain_list_vertical_margin" />
+        android:layout_marginLeft="@dimen/domain_list_horizontal_margin" />
 
     <ImageView
         android:id="@+id/add_task_button"
