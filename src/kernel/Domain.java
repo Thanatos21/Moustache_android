@@ -108,6 +108,11 @@ public class Domain implements Serializable {
 	}
 	
 	@Override
+	public boolean equals(Object o) {
+		return this.name.equals(((Domain) o).getName());
+	}
+
+	@Override
 	public String toString() {
 		String s;
 		

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/domain_item_height"
     android:orientation="horizontal"
     android:layout_marginTop="@dimen/domain_list_vertical_margin"
     android:layout_marginBottom="@dimen/domain_list_vertical_margin"

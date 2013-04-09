@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,15 +50,22 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 			AlertDialog.Builder al = new AlertDialog.Builder(mContext);
 			final View alView = mInflater.inflate(R.layout.create_dialog, null);
 			al.setView(alView);
-			al.setTitle(R.string.task_dialog_title);
+			String dialogTitle = mContext.getString(R.string.task_dialog_title) + " " + items.get(groupPosition).getName();
+			al.setTitle(dialogTitle);
 			al.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					EditText taskName = (EditText) alView.findViewById(R.id.create_dialog_titleValue);
 					String sTaskName = taskName.getText().toString();
 					
 					if ( sTaskName.length() > 0 ) {
-						items.get(groupPosition).addTask(new Task(taskName.getText().toString()));
-						notifyDataSetChanged();
+						Task t = new Task(taskName.getText().toString());
+						if ( items.get(groupPosition).getTasks().contains(t) ) {
+							Toast.makeText(mContext, R.string.warningSameTaskTitle, Toast.LENGTH_LONG).show();
+						}
+						else {
+							items.get(groupPosition).addTask(t);
+							notifyDataSetChanged();
+						}
 					}
 					else {
 						Toast.makeText(mContext, R.string.warningSizeTitle, Toast.LENGTH_LONG).show();

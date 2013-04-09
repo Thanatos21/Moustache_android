@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Moustache</string>
+    <string name="action_settings">Propriétés</string>
+    
+    <!-- Dialog titles -->
+    <string name="domain_dialog_title">Nouveau domaine</string>
+    <string name="task_dialog_title">Nouvelle tâche dans</string>
+    
+    <!-- Empty Domains message -->
+    <string name="domain_list_empty">Liste de domaine vide</string>
+    
+    <!-- Ok, Cancel, ... buttons -->
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Annuler</string>
+    
+    <!-- Warning messages -->
+    <string name="warningSizeTitle">Le nom ne peut être vide</string>
+    <string name="warningSameDomainTitle">Domaine déjà existant</string>
+    <string name="warningSameTaskTitle">Tâche déjà existante</string>
+    <string name="alertRemovedDomain">Domaine supprimé</string>
+    <string name="alertRemovedTask">Tâche supprimée</string>
+    
+    <!-- Main split action bar (for the Domain activity) -->
+    <string name="menu_addDomain">Nouveau Domain</string>
+    <string name="create_dialog_titleValue_hint">Entrez le nom</string>
+</resources>

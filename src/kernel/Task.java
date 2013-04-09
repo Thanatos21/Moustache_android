@@ -63,7 +63,6 @@ public class Task implements Serializable {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		// TODO Auto-generated method stub
 		return this.name.equals(((Task) obj).getName());
 	}
 

@@ -6,5 +6,7 @@
     <dimen name="domain_list_horizontal_margin">16dp</dimen>
     <dimen name="domain_list_vertical_margin">16dp</dimen>
     <dimen name="task_sublist_horizontal_margin">32dp</dimen>
+    <dimen name="domain_item_height">64dp</dimen>
+    <dimen name="task_item_height">40dp</dimen>
 
 </resources>

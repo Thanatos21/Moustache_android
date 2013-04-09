@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kernel.Domain;
+import kernel.Task;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
@@ -26,6 +28,7 @@ import com.univ_nantes.moustache.adapter.SwipeDismissGroupListViewTouchListener;
 import com.univ_nantes.moustache.dialog.DomainDialogFragment;
 import com.univ_nantes.moustache.dialog.DomainDialogFragment.DomainDialogListener;
 
+@SuppressLint("NewApi")
 public class MainActivity extends Activity implements DomainDialogListener {
 	private static final String SAVE_FILE_NAME = "moustache.save";
 	
@@ -39,13 +42,14 @@ public class MainActivity extends Activity implements DomainDialogListener {
 		
 		loadSavedData();
 		
-		ExpandableListView exList = (ExpandableListView) findViewById(R.id.main_list);
+		final ExpandableListView exList = (ExpandableListView) findViewById(R.id.main_list);
 	    adapter = new DomainAdapter(domainList, this);
 	    adapter.registerDataSetObserver(new DataSetObserver() {
 	    	public void onChanged() {
 	    		saveData();
 	    	}
 		});
+	    exList.setEmptyView(findViewById(R.id.empty_list_layout));
 	    exList.setIndicatorBounds(0, 20);
 	    exList.setAdapter(adapter);
 	    SwipeDismissGroupListViewTouchListener touchListener =
@@ -55,9 +59,46 @@ public class MainActivity extends Activity implements DomainDialogListener {
                                 for (int position : reverseSortedPositions) {
                                     //domainList.remove(adapter.getGroup(position));
                                 	int grpPosition = ExpandableListView.getPackedPositionGroup(position);
-                                	System.out.println(listView + " - "+ position + " - " + grpPosition);
+                                	//System.out.println(listView + " - "+ position + " - " + grpPosition);
+                                	Object o = exList.getItemAtPosition(position);
+                                	System.out.println(o.getClass().getName());
+                                	if ( o.getClass().getName().equals("kernel.Domain") ) {
+                                		domainList.remove(o);
+                                		adapter.notifyDataSetChanged();
+                                		Toast.makeText(getApplicationContext(), R.string.alertRemovedDomain, Toast.LENGTH_LONG).show();
+                                	}
+                                	else {
+                                		// Retrieve domain position
+                                		int domainPosition = 0;
+                                		int i = 0;
+                                		boolean notFound = true;
+                                		do {
+                                			if ( exList.isGroupExpanded(domainPosition) ) {
+                                				if ( i + adapter.getChildrenCount(domainPosition) < position ) {
+                                					domainPosition++;
+                                					i += domainPosition + adapter.getChildrenCount(domainPosition-1);
+                                					System.out.println("Not here " + i + " - " + domainPosition);
+                                				}
+                                				else if ( i + adapter.getChildrenCount(domainPosition) == position ) {
+                                					System.out.println("plopplop");
+                                					System.out.println("Not here " + i + " - " + domainPosition);
+                                					notFound = false;
+                                				}
+                                				else {
+                                					notFound = false;
+                                				}
+                                			}
+                                			else {
+                                				domainPosition++;
+                                				i++;
+                                			}
+                                		} while ( notFound );
+                                		System.out.println(domainPosition);
+                                		domainList.get(domainPosition).removeTask((Task) o);
+                                		adapter.notifyDataSetChanged();
+                                		Toast.makeText(getApplicationContext(), R.string.alertRemovedTask, Toast.LENGTH_LONG).show();
+                                	}
                                 }
-                                adapter.notifyDataSetChanged();
                             }
                         });
         exList.setOnTouchListener(touchListener);
@@ -71,6 +112,7 @@ public class MainActivity extends Activity implements DomainDialogListener {
 		return true;
 	}
 	
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onOptionsItemSelected (MenuItem item)
 	{
@@ -97,21 +139,17 @@ public class MainActivity extends Activity implements DomainDialogListener {
 		// Checking whether or not the user typed an entry
 		if ( domainTitle.length() > 0 ) {
 			Domain d = new Domain(domainTitle);
-			domainList.add(d);
-			adapter.notifyDataSetChanged();
-			
-			System.out.println("Creating a new domain with the name : " + domainTitle);
+			if ( domainList.contains(d) ) {
+				Toast.makeText(getApplicationContext(), R.string.warningSameDomainTitle, Toast.LENGTH_LONG).show();
+			}
+			else {
+				domainList.add(d);
+				adapter.notifyDataSetChanged();
+				
+				System.out.println("Creating a new domain with the name : " + domainTitle);
+			}
 		}
 		else {
-//			AlertDialog.Builder warningSize = new AlertDialog.Builder(this);
-//			warningSize.setMessage(R.string.warningSizeTitle);
-//			warningSize.setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-//                public void onClick(DialogInterface dialog, int id) {
-//                    // Do nothing. Have to check if the Listener is mandatory
-//                }
-//            });
-//
-//			warningSize.create().show();
 			Toast.makeText(getApplicationContext(), R.string.warningSizeTitle, Toast.LENGTH_LONG).show();
 		}
 	}
