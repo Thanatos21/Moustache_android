@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translator: alvalpo <alvlapo@gmail.com> -->
+
+    <string name="app_name">Moustache</string>
+    
+    <!-- Dialog titles -->
+    <string name="domain_dialog_title">Новый список задач</string>
+    <string name="task_dialog_title">Новая задача для</string>
+    
+    <!-- Empty Domains message -->
+    <string name="domain_list_empty">Список пуст</string>
+    
+    <!-- Ok, Cancel, ... buttons -->
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">Отмена</string>
+    
+    <!-- Warning messages -->
+    <string name="warningSizeTitle">Имя задачи не может быть пустым</string>
+    <string name="warningSameDomainTitle">Список с таким именем уже существует</string>
+    <string name="warningSameTaskTitle">Задача с таким именем уже существует</string>
+    <string name="alertRemovedDomain">Список удалён</string>
+    <string name="alertRemovedTask">Задача удалена</string>
+    
+    <!-- Main split action bar (for the Domain activity) -->
+    <string name="menu_addDomain">Новый список</string>
+    <string name="create_dialog_titleValue_hint">Задайте имя</string>
+</resources>
