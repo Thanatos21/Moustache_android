@@ -73,8 +73,7 @@ public class DomainAdapter extends BaseExpandableListAdapter {
 				}
 			});
 	 
-	        //On crée un bouton "Annuler" à notre AlertDialog et on lui affecte un évènement
-			al.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+	        al.setNegativeButton(R.string.cancel_button, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					System.out.println("Cancelling the new task creation");
 				}
